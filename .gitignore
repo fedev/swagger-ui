@@ -21,3 +21,4 @@ swagger-ui.sublime-workspace
 .project
 dist/*
 doc/*
+node_modules
