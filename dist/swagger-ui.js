@@ -1054,7 +1054,10 @@ helpers = helpers || Handlebars.helpers; data = data || {};
         _ref1.clear();
       }
       this.headerView.update(this.options.discoveryUrl, this.options.apiKey);
-      return this.api = new SwaggerApi(this.options);
+      this.api = new SwaggerApi(this.options);
+      return this.api.headersGen = this.options.headersGen || function() {
+        return {};
+      };
     };
 
     SwaggerUi.prototype.render = function() {
@@ -1346,7 +1349,7 @@ helpers = helpers || Handlebars.helpers; data = data || {};
     };
 
     OperationView.prototype.submitOperation = function(e) {
-      var bodyParam, consumes, error_free, form, headerParams, invocationUrl, isFileUpload, isFormPost, map, o, obj, param, paramContentTypeField, responseContentTypeField, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref5, _ref6, _ref7, _ref8, _ref9,
+      var bodyParam, consumes, error_free, extraHeaders, form, header, headerParams, headersGen, invocationUrl, isFileUpload, isFormPost, map, o, obj, param, paramContentTypeField, param_count, responseContentTypeField, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref5, _ref6, _ref7, _ref8, _ref9,
         _this = this;
 
       if (e != null) {
@@ -1420,17 +1423,20 @@ helpers = helpers || Handlebars.helpers; data = data || {};
             }
           }
         } else {
-          bodyParam = null;
+          bodyParam = {};
+          param_count = 0;
           _ref9 = this.model.parameters;
           for (_m = 0, _len4 = _ref9.length; _m < _len4; _m++) {
             param = _ref9[_m];
-            if (param.paramType === 'body') {
-              bodyParam = map[param.name];
+            if (param.paramType === 'body' && typeof map[param.name] !== 'undefined') {
+              bodyParam[param.name] = map[param.name];
+              param_count++;
             }
           }
+          bodyParam = param_count > 0 ? JSON.stringify(bodyParam) : void 0;
         }
         log("bodyParam = " + bodyParam);
-        headerParams = null;
+        headerParams = {};
         invocationUrl = this.model.supportHeaderParams() ? (headerParams = this.model.getHeaderParams(map), this.model.urlify(map, false)) : this.model.urlify(map, true);
         log('submitting ' + invocationUrl);
         $(".request_url", $(this.el)).html("<pre>" + invocationUrl + "</pre>");
@@ -1466,6 +1472,13 @@ helpers = helpers || Handlebars.helpers; data = data || {};
         if (responseContentTypeField) {
           obj.headers = obj.headers != null ? obj.headers : {};
           obj.headers.accept = responseContentTypeField;
+        }
+        headersGen = this.model.resource.api.headersGen || function() {
+          return {};
+        };
+        extraHeaders = headersGen(obj);
+        for (header in extraHeaders) {
+          obj.headers[header] = extraHeaders[header];
         }
         jQuery.ajax(obj);
         return false;
