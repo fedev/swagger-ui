@@ -27,6 +27,7 @@
                 supportHeaderParams: false,
                 supportedSubmitMethods: ['get', 'post', 'put'],
                 onComplete: function(swaggerApi, swaggerUi){
+                  howareyou.refresh_patient_ids();
                 	if(console) {
                         console.log("Loaded SwaggerUI")
                         console.log(swaggerApi);
@@ -70,11 +71,12 @@
 
   </div>
 
-
   <div id="howareyou_credestials">
     <form class="howareyou_frame">
       <div class="howareyou_title_bar">Keys &amp; Secrets</div>
       <div class="howareyou_content">
+        <label for="howareyou_patient_id">Default Patient ID</label>
+        <input type="text" id="howareyou_patient_id" />
         <label for="howareyou_consumer_key">Consumer Key</label>
         <input type="text" id="howareyou_consumer_key" />
         <label for="howareyou_consumer_secret">Consumer Secret</label>
@@ -83,8 +85,8 @@
 
       <div class="howareyou_bottom_bar">
         <div class="howareyou_left">
-          Insert your <a href="#">own keys</a> or the
-          <a href="#">default ones</a>.
+          Insert your <a href="#" id="howareyou_use_own_keys">own keys</a> or the
+          <a href="#" id="howareyou_use_default_keys">default ones</a>.
         </div>
         <div class="howareyou_right">
           <div class="howareyou_bluebutton" id="howareyou_hide_credestials">Close</div>
