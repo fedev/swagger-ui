@@ -69,10 +69,12 @@ body {
 }
 
 #howareyou_credestials {
+  display: none;
   background: black;
   background: rgba(0, 0, 0, 0.5);
   position: fixed;
-  top: 0;
+  opacity: 0;
+  top: -400px;
   left: 0;
   right: 0;
   bottom: 0;
@@ -226,7 +228,7 @@ body {
   padding: 50px;
 }
 
-.howareyou_plain h1 {
+.howareyou_frame h1 {
   color: #5da5de;
   font-size: 24px;
 
