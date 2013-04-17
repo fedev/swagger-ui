@@ -41,7 +41,7 @@
                     }
                 },
                 docExpansion: "none",
-                headersGen: howareyou_gen_headers
+                headersGen: howareyou.gen_headers
             });
 
             window.swaggerUi.load();
@@ -52,7 +52,7 @@
 
 <body>
 
-  <div class="howareyou_header">
+  <div class="howareyou_header" id="howareyou_header">
 
     <div class="howareyou_max960">
       <a href="https://chid.howareyou.com" class="howareyou_logo">
@@ -60,11 +60,37 @@
       </a>
 
       <div class="howareyou_right">
+        <a href="" id="howareyou_toggle_credestials">Edit Keys &amp; Secrets</a>
         <a href="" class="active">Documentation</a>
         <a href="https://chid.howareyou.com/sign_ups/new">Register</a>
         <a href="https://chid.howareyou.com/sign_in">Sign in</a>
       </div>
+
     </div>
+
+  </div>
+
+
+  <div id="howareyou_credestials">
+    <form class="howareyou_frame">
+      <div class="howareyou_title_bar">Keys &amp; Secrets</div>
+      <div class="howareyou_content">
+        <label for="howareyou_consumer_key">Consumer Key</label>
+        <input type="text" id="howareyou_consumer_key" />
+        <label for="howareyou_consumer_secret">Consumer Secret</label>
+        <input type="text" id="howareyou_consumer_secret" />
+      </div>
+
+      <div class="howareyou_bottom_bar">
+        <div class="howareyou_left">
+          Insert your <a href="#">own keys</a> or the
+          <a href="#">default ones</a>.
+        </div>
+        <div class="howareyou_right">
+          <div class="howareyou_bluebutton" id="howareyou_hide_credestials">Close</div>
+        </div>
+      </div>
+    </form>
   </div>
 
 
