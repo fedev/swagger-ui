@@ -1349,7 +1349,7 @@ helpers = helpers || Handlebars.helpers; data = data || {};
     };
 
     OperationView.prototype.submitOperation = function(e) {
-      var bodyParam, consumes, error_free, extraHeaders, form, header, headerParams, headersGen, invocationUrl, isFileUpload, isFormPost, map, o, obj, param, paramContentTypeField, param_count, responseContentTypeField, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref5, _ref6, _ref7, _ref8, _ref9,
+      var bodyParam, consumes, error_free, extraHeaders, form, header, headerParams, headersGen, invocationUrl, isFileUpload, isFormPost, map, o, obj, param, paramContentTypeField, responseContentTypeField, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref5, _ref6, _ref7, _ref8, _ref9,
         _this = this;
 
       if (e != null) {
@@ -1424,16 +1424,15 @@ helpers = helpers || Handlebars.helpers; data = data || {};
           }
         } else {
           bodyParam = {};
-          param_count = 0;
+          consumes = 'application/x-www-form-urlencoded';
           _ref9 = this.model.parameters;
           for (_m = 0, _len4 = _ref9.length; _m < _len4; _m++) {
             param = _ref9[_m];
             if (param.paramType === 'body' && typeof map[param.name] !== 'undefined') {
               bodyParam[param.name] = map[param.name];
-              param_count++;
             }
           }
-          bodyParam = param_count > 0 ? JSON.stringify(bodyParam) : void 0;
+          bodyParam = jQuery.param(bodyParam);
         }
         log("bodyParam = " + bodyParam);
         headerParams = {};
@@ -1658,7 +1657,7 @@ helpers = helpers || Handlebars.helpers; data = data || {};
     ParameterView.prototype.initialize = function() {};
 
     ParameterView.prototype.render = function() {
-      var contentTypeModel, contentTypeView, signatureModel, signatureView, template;
+      var contentTypeModel, signatureModel, signatureView, template;
 
       if (this.model.paramType === 'body') {
         this.model.isBody = true;
@@ -1691,10 +1690,6 @@ helpers = helpers || Handlebars.helpers; data = data || {};
       if (this.model.produces) {
         contentTypeModel.produces = this.model.produces;
       }
-      contentTypeView = new ContentTypeView({
-        model: contentTypeModel
-      });
-      $('.content-type', $(this.el)).append(contentTypeView.render().el);
       return this;
     };
 
