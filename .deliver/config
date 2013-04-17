@@ -2,7 +2,6 @@
 
 APP="swagger"
 DELIVER_TO="~swagger/app/doc"
-DIST_DIR=doc # required by cake
-GENERATED_DIR=doc
+GENERATED_DIR=dist
 GENERATE_CMD="cake dist"
 STRATEGY=generated
