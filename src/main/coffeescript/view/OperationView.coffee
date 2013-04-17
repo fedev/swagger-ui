@@ -115,12 +115,11 @@ class OperationView extends Backbone.View
             bodyParam.append(param.name, map[param.name])
       else
         bodyParam = {}
-        param_count = 0
+        consumes = 'application/x-www-form-urlencoded'
         for param in @model.parameters
           if param.paramType is 'body' and typeof map[param.name] isnt 'undefined'
             bodyParam[param.name] = map[param.name]
-            param_count++
-        bodyParam = if param_count > 0 then JSON.stringify(bodyParam) else undefined
+        bodyParam = jQuery.param(bodyParam)
 
       log "bodyParam = " + bodyParam
 
