@@ -53,6 +53,12 @@ body {
   margin-left: 20px;
 }
 
+.howareyou_logged_in,
+.howareyou_header .howareyou_right a.howareyou_logged_in {
+  display: none;
+}
+
+
 .howareyou_header .howareyou_right a:hover,
 .howareyou_header .howareyou_right a:active,
 .howareyou_header .howareyou_right a.active {
