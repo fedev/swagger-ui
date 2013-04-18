@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Swagger UI</title>
+    <title>How Are You? API Explorer</title>
     <link href='//fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'/>
     <link href='css/hightlight.default.css' media='screen' rel='stylesheet' type='text/css'/>
     <link href='css/screen.css' media='screen' rel='stylesheet' type='text/css'/>
@@ -63,8 +63,10 @@
       <div class="howareyou_right">
         <a href="" id="howareyou_show_credestials">Edit Keys &amp; Secrets</a>
         <a href="" class="active">Documentation</a>
-        <a href="https://chid.howareyou.com/sign_ups/new">Register</a>
-        <a href="https://chid.howareyou.com/sign_in">Sign in</a>
+        <a href="https://chid.howareyou.com/account" class="howareyou_logged_in">Account</a>
+        <a href="https://chid.howareyou.com/sign_out" class="howareyou_logged_in">Sign out</a>
+        <a href="https://chid.howareyou.com/sign_ups/new" class="howareyou_demo">Register</a>
+        <a href="https://chid.howareyou.com/sign_in" class="howareyou_demo">Sign in</a>
       </div>
 
     </div>
@@ -85,8 +87,11 @@
 
       <div class="howareyou_bottom_bar">
         <div class="howareyou_left">
-          Insert your <a href="#" id="howareyou_use_own_keys">own keys</a> or the
-          <a href="#" id="howareyou_use_default_keys">default ones</a>.
+          Insert
+          <span class="howareyou_logged_in">
+            your <a href="#" id="howareyou_use_own_keys">own keys</a> or
+          </span>
+          the <a href="#" id="howareyou_use_default_keys">demo keys</a>.
         </div>
         <div class="howareyou_right">
           <div class="howareyou_bluebutton" id="howareyou_hide_credestials">Close</div>
