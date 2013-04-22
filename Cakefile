@@ -2,8 +2,6 @@ fs          = require 'fs'
 path        = require 'path'
 {exec}      = require 'child_process'
 
-dist_dir    = process.env['DIST_DIR'] or 'dist'
-
 sourceFiles  = [
   'SwaggerUi'
   'view/HeaderView'
@@ -19,12 +17,12 @@ sourceFiles  = [
 
 task 'clean', 'Removes distribution', ->
   console.log 'Clearing dist...'
-  exec "rm -rf #{dist_dir}"
+  exec 'rm -rf dist'
 
 task 'dist', 'Build a distribution', ->
   console.log "Build distribution in ./dist"
-  fs.mkdirSync(dist_dir) if not path.existsSync(dist_dir)
-  fs.mkdirSync("#{dist_dir}/lib") if not path.existsSync("#{dist_dir}/lib")
+  fs.mkdirSync('dist') if not path.existsSync('dist')
+  fs.mkdirSync('dist/lib') if not path.existsSync('dist/lib')
 
   appContents = new Array remaining = sourceFiles.length
   for file, index in sourceFiles then do (file, index) ->
@@ -40,15 +38,15 @@ task 'dist', 'Build a distribution', ->
     templateContents = new Array remaining = templateFiles.length
     for file, index in templateFiles then do (file, index) ->
       console.log "   : Compiling src/main/template/#{file}"
-      exec "handlebars src/main/template/#{file} -f #{dist_dir}/_#{file}.js", (err, stdout, stderr) ->
+      exec "handlebars src/main/template/#{file} -f dist/_#{file}.js", (err, stdout, stderr) ->
         throw err if err
-        fs.readFile "#{dist_dir}/_#{file}.js", 'utf8', (err, fileContents) ->
+        fs.readFile 'dist/_' + file + '.js', 'utf8', (err, fileContents) ->
           throw err if err
           templateContents[index] = fileContents
-          fs.unlink "#{dist_dir}/_#{file}.js"
+          fs.unlink 'dist/_' + file + '.js'
           if --remaining is 0
             templateContents.push '\n\n'
-            fs.writeFile "#{dist_dir}/_swagger-ui-templates.js", templateContents.join('\n\n'), 'utf8', (err) ->
+            fs.writeFile 'dist/_swagger-ui-templates.js', templateContents.join('\n\n'), 'utf8', (err) ->
               throw err if err
               build()
 
@@ -57,27 +55,27 @@ task 'dist', 'Build a distribution', ->
     console.log '   : Collecting Coffeescript source...'
 
     appContents.push '\n\n'
-    fs.writeFile "#{dist_dir}/_swagger-ui.coffee", appContents.join('\n\n'), 'utf8', (err) ->
+    fs.writeFile 'dist/_swagger-ui.coffee', appContents.join('\n\n'), 'utf8', (err) ->
       throw err if err
       console.log '   : Compiling...'
-      exec "coffee --compile #{dist_dir}/_swagger-ui.coffee", (err, stdout, stderr) ->
+      exec 'coffee --compile dist/_swagger-ui.coffee', (err, stdout, stderr) ->
         throw err if err
-        fs.unlink "#{dist_dir}/_swagger-ui.coffee"
+        fs.unlink 'dist/_swagger-ui.coffee'
         console.log '   : Combining with javascript...'
-        exec "cat src/main/javascript/doc.js #{dist_dir}/_swagger-ui-templates.js #{dist_dir}/_swagger-ui.js > #{dist_dir}/swagger-ui.js", (err, stdout, stderr) ->
+        exec 'cat src/main/javascript/doc.js dist/_swagger-ui-templates.js dist/_swagger-ui.js > dist/swagger-ui.js', (err, stdout, stderr) ->
           throw err if err
-          fs.unlink "#{dist_dir}/_swagger-ui.js"
-          fs.unlink "#{dist_dir}/_swagger-ui-templates.js"
+          fs.unlink 'dist/_swagger-ui.js'
+          fs.unlink 'dist/_swagger-ui-templates.js'
           console.log '   : Minifying all...'
-          exec "java -jar './bin/yuicompressor-2.4.7.jar' --type js -o '#{dist_dir}/swagger-ui.min.js' #{dist_dir}/swagger-ui.js", (err, stdout, stderr) ->
+          exec 'java -jar "./bin/yuicompressor-2.4.7.jar" --type js -o ' + 'dist/swagger-ui.min.js ' + 'dist/swagger-ui.js', (err, stdout, stderr) ->
             throw err if err
             pack()
 
   pack = ->
     console.log '   : Packaging...'
-    exec "cp -r lib #{dist_dir}"
-    exec "cp -r node_modules/swagger-client/lib/swagger.js #{dist_dir}/lib"
-    exec "cp -r src/main/html/* #{dist_dir}"
+    exec 'cp -r lib dist'
+    exec 'cp -r node_modules/swagger-client/lib/swagger.js dist/lib'
+    exec 'cp -r src/main/html/* dist'
     console.log '   !'
 
 task 'spec', "Run the test suite", ->
