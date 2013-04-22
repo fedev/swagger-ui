@@ -1044,20 +1044,34 @@ helpers = helpers || Handlebars.helpers; data = data || {};
     SwaggerUi.prototype.updateSwaggerUi = function(data) {
       this.options.discoveryUrl = data.discoveryUrl;
       this.options.apiKey = data.apiKey;
+      this.options.consumerKey = data.consumerKey;
+      this.options.consumerSecret = data.consumerSecret;
       return this.load();
     };
 
     SwaggerUi.prototype.load = function() {
-      var _ref1;
+      var auth, _ref1;
 
       if ((_ref1 = this.mainView) != null) {
         _ref1.clear();
       }
-      this.headerView.update(this.options.discoveryUrl, this.options.apiKey);
+      this.headerView.update(this.options);
       this.api = new SwaggerApi(this.options);
-      return this.api.headersGen = this.options.headersGen || function() {
-        return {};
-      };
+      if (this.options.consumerKey || this.options.consumerSecret) {
+        auth = ohauth.headerGenerator({
+          consumer_key: this.options.consumerKey,
+          consumer_secret: this.options.consumerSecret
+        });
+        return this.api.headersGen = function(obj) {
+          return {
+            Authorization: auth(obj.type, obj.url, obj.data)
+          };
+        };
+      } else {
+        return this.api.headersGen = this.options.headersGen || function() {
+          return {};
+        };
+      }
     };
 
     SwaggerUi.prototype.render = function() {
@@ -1125,9 +1139,12 @@ helpers = helpers || Handlebars.helpers; data = data || {};
     HeaderView.prototype.events = {
       'click #show-pet-store-icon': 'showPetStore',
       'click #show-wordnik-dev-icon': 'showWordnikDev',
+      'click #show-howareyou-icon': 'showHowAreYou',
       'click #explore': 'showCustom',
       'keyup #input_baseUrl': 'showCustomOnKeyup',
-      'keyup #input_apiKey': 'showCustomOnKeyup'
+      'keyup #input_apiKey': 'showCustomOnKeyup',
+      'keyup #input_consumerKey': 'showCustomOnKeyup',
+      'keyup #input_consumerSecret': 'showCustomOnKeyup'
     };
 
     HeaderView.prototype.initialize = function() {};
@@ -1146,6 +1163,14 @@ helpers = helpers || Handlebars.helpers; data = data || {};
       });
     };
 
+    HeaderView.prototype.showHowAreYou = function(e) {
+      return this.trigger('update-swagger-ui', {
+        discoveryUrl: "https://api.howareyou.com/cds_doc.json",
+        consumerKey: "ea6d7475b6509f4150644c0823dd512a",
+        consumerSecret: "0d26c7516c9dbf6d3a99ebb93477d74e"
+      });
+    };
+
     HeaderView.prototype.showCustomOnKeyup = function(e) {
       if (e.keyCode === 13) {
         return this.showCustom();
@@ -1158,16 +1183,20 @@ helpers = helpers || Handlebars.helpers; data = data || {};
       }
       return this.trigger('update-swagger-ui', {
         discoveryUrl: $('#input_baseUrl').val(),
-        apiKey: $('#input_apiKey').val()
+        apiKey: $('#input_apiKey').val(),
+        consumerKey: $('#input_consumerKey').val(),
+        consumerSecret: $('#input_consumerSecret').val()
       });
     };
 
-    HeaderView.prototype.update = function(url, apiKey, trigger) {
+    HeaderView.prototype.update = function(options, trigger) {
       if (trigger == null) {
         trigger = false;
       }
-      $('#input_baseUrl').val(url);
-      $('#input_apiKey').val(apiKey);
+      $('#input_baseUrl').val(options.discoveryUrl);
+      $('#input_apiKey').val(options.apiKey);
+      $('#input_consumerKey').val(options.consumerKey);
+      $('#input_consumerSecret').val(options.consumerSecret);
       if (trigger) {
         return this.trigger('update-swagger-ui', {
           discoveryUrl: url,

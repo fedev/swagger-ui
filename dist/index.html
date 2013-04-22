@@ -19,15 +19,6 @@
 
     <script type="text/javascript">
         $(function () {
-            var auth = ohauth.headerGenerator({
-                consumer_key:    'e21998e88c6294db50bf01dd245608fd',
-                consumer_secret: '18cc84c1ba4a90af8a55c7ee63e0b766'
-            });
-
-            function genAuthHeaders (obj) {
-                return { Authorization: auth(obj.type, obj.url, obj.data) };
-            }
-
             window.swaggerUi = new SwaggerUi({
                 discoveryUrl:"http://petstore.swagger.wordnik.com/api/api-docs.json",
                 dom_id:"swagger-ui-container",
@@ -47,8 +38,7 @@
                         console.log(data);
                     }
                 },
-                docExpansion: "none",
-                headersGen: genAuthHeaders
+                docExpansion: "none"
             });
 
             window.swaggerUi.load();
@@ -69,9 +59,13 @@
             <div class='input icon-btn'>
                 <img id="show-wordnik-dev-icon" src="images/wordnik_api.png" title="Show Wordnik Developer Apis">
             </div>
+            <div class='input icon-btn'>
+                <img id="show-howareyou-icon" src="images/howareyou_api.png" title="Show How Are You CDS API (OAuth)">
+            </div>
             <div class='input'><input placeholder="http://example.com/api" id="input_baseUrl" name="baseUrl"
                                       type="text"/></div>
-            <div class='input'><input placeholder="api_key" id="input_apiKey" name="apiKey" type="text"/></div>
+            <div class='input'><input placeholder="consumer_key" id="input_consumerKey" class="input_consumerSmth" name="consumerKey" type="text"/></div>
+            <div class='input'><input placeholder="consumer_secret" id="input_consumerSecret" class="input_consumerSmth" name="consumerSecret" type="text" /></div>
             <div class='input'><a id="explore" href="#">Explore</a></div>
         </form>
     </div>
