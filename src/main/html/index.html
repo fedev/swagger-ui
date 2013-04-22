@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>How Are You? API Explorer</title>
+    <title>Swagger UI</title>
     <link href='//fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'/>
     <link href='css/hightlight.default.css' media='screen' rel='stylesheet' type='text/css'/>
     <link href='css/screen.css' media='screen' rel='stylesheet' type='text/css'/>
-    <link href='css/howareyou.css' media='screen' rel='stylesheet' type='text/css'/>
     <script src='lib/jquery-1.8.0.min.js' type='text/javascript'></script>
     <script src='lib/jquery.slideto.min.js' type='text/javascript'></script>
     <script src='lib/jquery.wiggle.min.js' type='text/javascript'></script>
@@ -15,34 +14,41 @@
     <script src='lib/backbone-min.js' type='text/javascript'></script>
     <script src='lib/swagger.js' type='text/javascript'></script>
     <script src='lib/ohauth.js' type='text/javascript'></script>
-    <script src='lib/howareyou.js' type='text/javascript'></script>
     <script src='swagger-ui.js' type='text/javascript'></script>
     <script src='lib/highlight.7.3.pack.js' type='text/javascript'></script>
 
     <script type="text/javascript">
-	$(function () {
-	    window.swaggerUi = new SwaggerUi({
-                discoveryUrl:"https://api.howareyou.com/cds_doc.json",
+        $(function () {
+            var auth = ohauth.headerGenerator({
+                consumer_key:    'e21998e88c6294db50bf01dd245608fd',
+                consumer_secret: '18cc84c1ba4a90af8a55c7ee63e0b766'
+            });
+
+            function genAuthHeaders (obj) {
+                return { Authorization: auth(obj.type, obj.url, obj.data) };
+            }
+
+            window.swaggerUi = new SwaggerUi({
+                discoveryUrl:"http://petstore.swagger.wordnik.com/api/api-docs.json",
                 dom_id:"swagger-ui-container",
                 supportHeaderParams: false,
-                supportedSubmitMethods: ['get', 'post', 'put', 'delete'],
+                supportedSubmitMethods: ['get', 'post', 'put'],
                 onComplete: function(swaggerApi, swaggerUi){
-                  howareyou.refresh_patient_ids();
-                	if(console) {
-                        console.log("Loaded SwaggerUI")
+                    if(console) {
+                        console.log("Loaded SwaggerUI");
                         console.log(swaggerApi);
                         console.log(swaggerUi);
                     }
-                  $('pre code').each(function(i, e) {hljs.highlightBlock(e)});
+                    $('pre code').each(function(i, e) {hljs.highlightBlock(e)});
                 },
                 onFailure: function(data) {
-                	if(console) {
+                    if(console) {
                         console.log("Unable to Load SwaggerUI");
                         console.log(data);
                     }
                 },
                 docExpansion: "none",
-                headersGen: howareyou.gen_headers
+                headersGen: genAuthHeaders
             });
 
             window.swaggerUi.load();
@@ -52,54 +58,24 @@
 </head>
 
 <body>
+<div id='header'>
+    <div class="swagger-ui-wrap">
+        <a id="logo" href="http://swagger.wordnik.com">swagger</a>
 
-  <div class="howareyou_header" id="howareyou_header">
-
-    <div class="howareyou_max960">
-      <a href="https://chid.howareyou.com" class="howareyou_logo">
-        <img src="images/howareyou.png">
-      </a>
-
-      <div class="howareyou_right">
-        <a href="" id="howareyou_show_credestials">Edit Keys &amp; Secrets</a>
-        <a href="" class="active">Documentation</a>
-        <a href="https://chid.howareyou.com/account" class="howareyou_logged_in">Account</a>
-        <a href="https://chid.howareyou.com/sign_out" class="howareyou_logged_in">Sign out</a>
-        <a href="https://chid.howareyou.com/sign_ups/new" class="howareyou_demo">Register</a>
-        <a href="https://chid.howareyou.com/sign_in" class="howareyou_demo">Sign in</a>
-      </div>
-
+        <form id='api_selector'>
+            <div class='input icon-btn'>
+                <img id="show-pet-store-icon" src="images/pet_store_api.png" title="Show Swagger Petstore Example Apis">
+            </div>
+            <div class='input icon-btn'>
+                <img id="show-wordnik-dev-icon" src="images/wordnik_api.png" title="Show Wordnik Developer Apis">
+            </div>
+            <div class='input'><input placeholder="http://example.com/api" id="input_baseUrl" name="baseUrl"
+                                      type="text"/></div>
+            <div class='input'><input placeholder="api_key" id="input_apiKey" name="apiKey" type="text"/></div>
+            <div class='input'><a id="explore" href="#">Explore</a></div>
+        </form>
     </div>
-
-  </div>
-
-  <div id="howareyou_credestials">
-    <form class="howareyou_frame">
-      <div class="howareyou_title_bar">Keys &amp; Secrets</div>
-      <div class="howareyou_content">
-        <label for="howareyou_patient_id">Default Patient ID</label>
-        <input type="text" id="howareyou_patient_id" />
-        <label for="howareyou_consumer_key">Consumer Key</label>
-        <input type="text" id="howareyou_consumer_key" />
-        <label for="howareyou_consumer_secret">Consumer Secret</label>
-        <input type="text" id="howareyou_consumer_secret" />
-      </div>
-
-      <div class="howareyou_bottom_bar">
-        <div class="howareyou_left">
-          Insert
-          <span class="howareyou_logged_in">
-            your <a href="#" id="howareyou_use_own_keys">own keys</a> or
-          </span>
-          the <a href="#" id="howareyou_use_default_keys">demo keys</a>.
-        </div>
-        <div class="howareyou_right">
-          <div class="howareyou_bluebutton" id="howareyou_hide_credestials">Close</div>
-        </div>
-      </div>
-    </form>
-  </div>
-
+</div>
 
 <div id="message-bar" class="swagger-ui-wrap">
     &nbsp;
