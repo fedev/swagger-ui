@@ -36,9 +36,7 @@ class SwaggerUi extends Backbone.Router
   updateSwaggerUi: (data) ->
     @options.discoveryUrl = data.discoveryUrl
     @options.apiKey = data.apiKey
-    @options.consumerKey = data.consumerKey
     @options.consumerSecret = data.consumerSecret
-
     @load()
 
   # Create an api and render
@@ -48,12 +46,14 @@ class SwaggerUi extends Backbone.Router
     @headerView.update(@options)
     @api = new SwaggerApi(@options)
 
-    if @options.consumerKey or @options.consumerSecret
+    if @options.apiKey and @options.consumerSecret
       auth = ohauth.headerGenerator
-        consumer_key:    @options.consumerKey
+        consumer_key:    @options.apiKey
         consumer_secret: @options.consumerSecret
       @api.headersGen = (obj) ->
-        Authorization: auth obj.type, obj.url, obj.data
+        Authorization: auth(obj.type, obj.url, obj.data)
+
+      delete @options.apiKey
     else
       @api.headersGen = @options.headersGen or -> {}
 

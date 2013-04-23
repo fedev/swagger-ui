@@ -1044,7 +1044,6 @@ helpers = helpers || Handlebars.helpers; data = data || {};
     SwaggerUi.prototype.updateSwaggerUi = function(data) {
       this.options.discoveryUrl = data.discoveryUrl;
       this.options.apiKey = data.apiKey;
-      this.options.consumerKey = data.consumerKey;
       this.options.consumerSecret = data.consumerSecret;
       return this.load();
     };
@@ -1057,16 +1056,17 @@ helpers = helpers || Handlebars.helpers; data = data || {};
       }
       this.headerView.update(this.options);
       this.api = new SwaggerApi(this.options);
-      if (this.options.consumerKey || this.options.consumerSecret) {
+      if (this.options.apiKey && this.options.consumerSecret) {
         auth = ohauth.headerGenerator({
-          consumer_key: this.options.consumerKey,
+          consumer_key: this.options.apiKey,
           consumer_secret: this.options.consumerSecret
         });
-        return this.api.headersGen = function(obj) {
+        this.api.headersGen = function(obj) {
           return {
             Authorization: auth(obj.type, obj.url, obj.data)
           };
         };
+        return delete this.options.apiKey;
       } else {
         return this.api.headersGen = this.options.headersGen || function() {
           return {};
@@ -1143,7 +1143,6 @@ helpers = helpers || Handlebars.helpers; data = data || {};
       'click #explore': 'showCustom',
       'keyup #input_baseUrl': 'showCustomOnKeyup',
       'keyup #input_apiKey': 'showCustomOnKeyup',
-      'keyup #input_consumerKey': 'showCustomOnKeyup',
       'keyup #input_consumerSecret': 'showCustomOnKeyup'
     };
 
@@ -1166,7 +1165,7 @@ helpers = helpers || Handlebars.helpers; data = data || {};
     HeaderView.prototype.showHowAreYou = function(e) {
       return this.trigger('update-swagger-ui', {
         discoveryUrl: "https://api.howareyou.com/cds_doc.json",
-        consumerKey: "ea6d7475b6509f4150644c0823dd512a",
+        apiKey: "ea6d7475b6509f4150644c0823dd512a",
         consumerSecret: "0d26c7516c9dbf6d3a99ebb93477d74e"
       });
     };
@@ -1184,7 +1183,6 @@ helpers = helpers || Handlebars.helpers; data = data || {};
       return this.trigger('update-swagger-ui', {
         discoveryUrl: $('#input_baseUrl').val(),
         apiKey: $('#input_apiKey').val(),
-        consumerKey: $('#input_consumerKey').val(),
         consumerSecret: $('#input_consumerSecret').val()
       });
     };
@@ -1195,7 +1193,6 @@ helpers = helpers || Handlebars.helpers; data = data || {};
       }
       $('#input_baseUrl').val(options.discoveryUrl);
       $('#input_apiKey').val(options.apiKey);
-      $('#input_consumerKey').val(options.consumerKey);
       $('#input_consumerSecret').val(options.consumerSecret);
       if (trigger) {
         return this.trigger('update-swagger-ui', {
