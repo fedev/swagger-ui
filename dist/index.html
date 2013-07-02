@@ -64,20 +64,20 @@
         <a href="" id="howareyou_show_credestials">Edit Keys &amp; Secrets</a>
         <a href="" class="active">Documentation</a>
         <a href="https://chid.howareyou.com/account" class="howareyou_logged_in">Account</a>
-        <a href="https://chid.howareyou.com/sign_out" class="howareyou_logged_in">Sign out</a>
+        <a href="" id="howareyou_logout" class="howareyou_logged_in">Sign out</a>
         <a href="https://chid.howareyou.com/sign_ups/new" class="howareyou_demo">Register</a>
-        <a href="https://chid.howareyou.com/sign_in" class="howareyou_demo">Sign in</a>
+        <a href="" id="howareyou_show_login" class="howareyou_demo">Sign in</a>
       </div>
 
     </div>
 
   </div>
 
-  <div id="howareyou_credestials">
+  <div id="howareyou_credestials" class="howareyou_float">
     <form class="howareyou_frame">
       <div class="howareyou_title_bar">Keys &amp; Secrets</div>
       <div class="howareyou_content">
-        <label for="howareyou_patient_id">Default Patient ID</label>
+        <label for="howareyou_patient_id">Default User ID</label>
         <input type="text" id="howareyou_patient_id" />
         <label for="howareyou_consumer_key">Consumer Key</label>
         <input type="text" id="howareyou_consumer_key" />
@@ -86,15 +86,34 @@
       </div>
 
       <div class="howareyou_bottom_bar">
-        <div class="howareyou_left">
-          Insert
-          <span class="howareyou_logged_in">
-            your <a href="#" id="howareyou_use_own_keys">own keys</a> or
-          </span>
+        <div class="howareyou_left text">
+          Insert your <a href="#" id="howareyou_use_own_keys">own keys</a> or
           the <a href="#" id="howareyou_use_default_keys">demo keys</a>.
         </div>
         <div class="howareyou_right">
           <div class="howareyou_bluebutton" id="howareyou_hide_credestials">Close</div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div id="howareyou_login_form" class="howareyou_float">
+    <form class="howareyou_frame">
+      <div class="howareyou_title_bar">Sign in</div>
+      <div class="howareyou_content">
+        <label for="howareyou_consumer_key">Email</label>
+        <input type="text" id="howareyou_email" />
+        <label for="howareyou_consumer_secret">Password</label>
+        <input type="password" id="howareyou_password" />
+      </div>
+
+      <div class="howareyou_bottom_bar">
+        <div class="howareyou_left">
+          <div class="howareyou_bluebutton" id="howareyou_hide_login">Close</div>
+          <span class="text" id="howareyou_login_status"></span>
+        </div>
+        <div class="howareyou_right">
+          <button class="howareyou_bluebutton" id="howareyou_login">Sign in</button>
         </div>
       </div>
     </form>
