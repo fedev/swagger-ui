@@ -22,12 +22,12 @@
     <script type="text/javascript">
 	$(function () {
 	    window.swaggerUi = new SwaggerUi({
-                discoveryUrl:"https://api.howareyou.com/root_doc.json",
+                discoveryUrl:"http://localhost:3000/chid_doc.json",
                 dom_id:"swagger-ui-container",
                 supportHeaderParams: false,
                 supportedSubmitMethods: ['get', 'post', 'put', 'delete'],
                 onComplete: function(swaggerApi, swaggerUi){
-                  howareyou.refresh_patient_ids();
+                  howareyou.refresh_user_ids();
                 	if(console) {
                         console.log("Loaded SwaggerUI")
                         console.log(swaggerApi);
@@ -61,11 +61,9 @@
       </a>
 
       <div class="howareyou_right">
-        <a href="" id="howareyou_show_credestials">Edit Keys &amp; Secrets</a>
-        <a href="" class="active">Documentation</a>
-        <a href="https://chid.howareyou.com/account" class="howareyou_logged_in">Account</a>
+        <a href="" id="howareyou_show_credestials">Keys &amp; Secrets</a>
         <a href="" id="howareyou_logout" class="howareyou_logged_in">Sign out</a>
-        <a href="https://chid.howareyou.com/sign_ups/new" class="howareyou_demo">Register</a>
+        <a href="" id="howareyou_show_register" class="howareyou_demo">Register</a>
         <a href="" id="howareyou_show_login" class="howareyou_demo">Sign in</a>
       </div>
 
@@ -77,12 +75,12 @@
     <form class="howareyou_frame">
       <div class="howareyou_title_bar">Keys &amp; Secrets</div>
       <div class="howareyou_content">
-        <label for="howareyou_patient_id">Default User ID</label>
-        <input type="text" id="howareyou_patient_id" />
+        <label for="howareyou_user_id">Default User ID</label>
+        <input type="text" id="howareyou_user_id">
         <label for="howareyou_consumer_key">Consumer Key</label>
-        <input type="text" id="howareyou_consumer_key" />
+        <input type="text" id="howareyou_consumer_key">
         <label for="howareyou_consumer_secret">Consumer Secret</label>
-        <input type="text" id="howareyou_consumer_secret" />
+        <input type="text" id="howareyou_consumer_secret">
       </div>
 
       <div class="howareyou_bottom_bar">
@@ -91,29 +89,61 @@
           the <a href="#" id="howareyou_use_default_keys">demo keys</a>.
         </div>
         <div class="howareyou_right">
-          <div class="howareyou_bluebutton" id="howareyou_hide_credestials">Close</div>
+          <div class="howareyou_bluebutton howareyou_hide_modal">Close</div>
         </div>
       </div>
     </form>
   </div>
 
-  <div id="howareyou_login_form" class="howareyou_float">
+  <div id="howareyou_login_modal" class="howareyou_float">
     <form class="howareyou_frame">
       <div class="howareyou_title_bar">Sign in</div>
       <div class="howareyou_content">
-        <label for="howareyou_consumer_key">Email</label>
-        <input type="text" id="howareyou_email" />
-        <label for="howareyou_consumer_secret">Password</label>
-        <input type="password" id="howareyou_password" />
+        <label for="howareyou_login_email">Email</label>
+        <input type="email" name="email" id="howareyou_login_email" required>
+
+        <label for="howareyou_login_password">Password</label>
+        <input type="password" name="password" id="howareyou_login_password" required>
       </div>
 
       <div class="howareyou_bottom_bar">
         <div class="howareyou_left">
-          <div class="howareyou_bluebutton" id="howareyou_hide_login">Close</div>
+          <div class="howareyou_bluebutton howareyou_hide_modal">Close</div>
           <span class="text" id="howareyou_login_status"></span>
         </div>
         <div class="howareyou_right">
           <button class="howareyou_bluebutton" id="howareyou_login">Sign in</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div id="howareyou_register_modal" class="howareyou_float">
+    <form class="howareyou_frame">
+      <div class="howareyou_title_bar">Register</div>
+      <div class="howareyou_content">
+        <label for="howareyou_register_first_name">Name</label>
+        <input type="text" id="howareyou_register_first_name" name="first_name" placeholder="First name" required="true">
+
+        <input type="text" id="howareyou_register_last_name" name="last_name" placeholder="Last name" required="true">
+
+        <label for="howareyou_register_email">Email Address</label>
+        <input type="email" id="howareyou_register_email" name="email" required="true">
+
+        <label for="password">Password <span class="howareyou_parenthesis">(at least 8 characters)</span></label>
+        <input type="password" id="howareyou_register_password" name="password"
+               pattern=".{8,}" required placeholder="Password">
+        <input type="password" id="howareyou_register_password2" name="password2"
+               pattern=".{8,}" required placeholder="Confirm Password">
+      </div>
+
+      <div class="howareyou_bottom_bar">
+        <div class="howareyou_left">
+          <div class="howareyou_bluebutton howareyou_hide_modal">Close</div>
+          <span class="text" id="howareyou_register_status"></span>
+        </div>
+        <div class="howareyou_right">
+          <button class="howareyou_bluebutton" id="howareyou_register">Register</button>
         </div>
       </div>
     </form>
